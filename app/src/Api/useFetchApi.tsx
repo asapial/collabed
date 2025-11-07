@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-// import useAxiosSecure from "../hooks/useAxiosSecure";
-// import { AuthContext } from "../main";
+
 
 const useFetchApi = () => {
   const axiosSecure = useAxiosSecure();

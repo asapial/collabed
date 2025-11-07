@@ -1,7 +1,6 @@
-import { AuthContext } from '@/app/(tabs)';
 import axios from 'axios';
 import { useContext } from 'react';
-// import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 
 

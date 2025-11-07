@@ -1,18 +1,19 @@
-import {  ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import React, { createContext } from 'react'
 import Home from '../pages/home/home'
 import AppBar from '../src/Components/shared/appBar'
+// import AuthProvider from '../src/context/AuthProvider';
 
 
-export const AuthContext = createContext();
+
 
 
 const index = () => {
   return (
+
     <ScrollView>
-      <AppBar></AppBar>
-      <Home></Home>
-    </ScrollView>
+        <Home></Home>
+      </ScrollView>
   )
 }
 

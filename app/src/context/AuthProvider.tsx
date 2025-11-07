@@ -4,7 +4,8 @@ import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged,
 
 import { auth } from '../services/firebase.init';
 import axios from 'axios';
-import { AuthContext } from '../../(tabs)/index';
+import { AuthContext } from './AuthContext';
+
 
 
 const AuthProvider = ({children}) => {

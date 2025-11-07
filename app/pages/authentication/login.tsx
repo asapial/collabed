@@ -6,32 +6,43 @@ import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 // import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { auth } from "../../src/services/firebase.init";
-import { AuthContext } from "../../(tabs)/index";
+import { AuthContext } from "@/app/src/context/AuthContext";
+// import LottieView from 'lottie-react-native';
+
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-    const { loginUser, loginWithGoogle,     mongoLoading, setMongoLoading } = useContext(AuthContext);
+  const { loginWithGoogle } = useContext(AuthContext);
 
 
-//   const handleLogin = async () => {
+  const handleLogin = async () => {
 //     try {
 //       await signInWithEmailAndPassword(auth, email, password);
 //       router.replace("/"); // navigate home
 //     } catch (error) {
 //       console.log("Login Error:", error.message);
 //     }
-//   };
+  };
 
   const handleGoogleLogin = async () => {
+    // loginWithGoogle()
+    //   .then((data) => {
+    //     // handleInsertDataLogin(data, findTheUser, postTheUser,mongoLoading, setMongoLoading);
+    //     // navigate(`${location.state ? location.state : "/"}`);
+    //   })
+    //   .catch((error) => {
+    //     // ErrorToast(`Error Occurred: ${error.message}`);
+    //   });
+
     loginWithGoogle()
       .then((data) => {
-        // handleInsertDataLogin(data, findTheUser, postTheUser,mongoLoading, setMongoLoading);
-        // navigate(`${location.state ? location.state : "/"}`);
+        router.replace("/"); // navigate home
+        console.log("Google Login Success:", data);
       })
       .catch((error) => {
-        // ErrorToast(`Error Occurred: ${error.message}`);
+        console.log("Google Login Error:", error.message);
       });
   };
 
@@ -39,12 +50,12 @@ export default function Login() {
     <View style={styles.container}>
 
       {/* Animation */}
-      {/* <LottieView 
-        source={require("../../assets/Animation/login.json")}
-        autoPlay
-        loop
-        style={{ width: 200, height: 200 }}
-      /> */}
+    {/* <LottieView
+      source={require("../../src/assets/Animation/login.json")}
+      style={{width: "100%", height: "100%"}}
+      autoPlay
+      loop
+    /> */}
 
       <Text style={styles.title}>Welcome to CollabEd</Text>
       <Text style={styles.subtitle}>Please sign in to continue</Text>
