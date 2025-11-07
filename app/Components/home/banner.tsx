@@ -1,9 +1,10 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import Lottie from "lottie-react-native";
+// import Lottie from "lottie-react-native";
 // import Icon from "react-native-vector-icons/FontAwesome";
 
 // import educationBanner from "../assets/Animation/educationBanner.json";
+import LottieView from "lottie-react-native";
 
 const Banner = () => {
   return (
@@ -43,7 +44,9 @@ const Banner = () => {
 
       {/* Right Lottie */}
       <View style={styles.animationContainer}>
-        <Lottie source={educationBanner} autoPlay loop style={{ width: 260, height: 260 }} />
+        {/* <Lottie source={educationBanner} autoPlay loop style={{ width: 260, height: 260 }} /> */}
+
+        {/* <LottieView source={require('../assets/Animation/educationBanner.json')} autoPlay loop /> */}
       </View>
     </View>
   );
@@ -53,6 +56,7 @@ export default Banner;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor:"#FEFFED",
     flexDirection: "column",
     paddingVertical: 30,
     paddingHorizontal: 20,
