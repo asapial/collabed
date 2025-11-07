@@ -1,6 +1,6 @@
 
-import Banner from "@/app/Components/home/banner";
-import SixStudySession from "@/app/Components/home/sixStudySession";
+import Banner from "@/app/src/Components/home/banner";
+import SixStudySession from "@/app/src/Components/home/sixStudySession";
 import React from "react";
 import { View, ScrollView } from "react-native";
 
