@@ -61,7 +61,7 @@ function CustomDrawer() {
       {/* ✅ Tutor Drawer */}
       {user && user.userRole === 'Tutor' && (
         <>
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/tutor/tutorOverview')}>
             <Text style={styles.drawerText}>Tutor Dashboard</Text>
           </TouchableOpacity>
 
