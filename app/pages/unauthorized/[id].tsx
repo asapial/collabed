@@ -1,96 +1,182 @@
-import React, { useState, useContext, useEffect } from "react";
-import { View, Text, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from "react-native";
-import { useLocalSearchParams, router } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
 import { AuthContext } from "@/app/src/context/AuthContext";
 import useFetchApi from "@/app/src/Api/useFetchApi";
+// import { AuthContext } from "../../main";
+// import useFetchApi from "../../Api/useFetchApi";
+// import { SuccessToast, ErrorToast } from "../../utils/ToastMaker";
 
-export default function SessionDetails() {
+const SessionDetails = () => {
   const { id } = useLocalSearchParams();
+  const router = useRouter();
   const { user } = useContext(AuthContext);
   const { getSessionById, getSessionReviews, bookSession, postReview, checkBooked } = useFetchApi();
 
   const [session, setSession] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [isBooked, setIsBooked] = useState(false);
-  const [loading, setLoading] = useState(true);
+
   const [comment, setComment] = useState("");
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const sessionData = await getSessionById(id);
-        setSession(sessionData);
-        const reviewData = await getSessionReviews(id);
-        setReviews(reviewData);
-        const bookedStatus = await checkBooked(user?.email, id);
-        setIsBooked(bookedStatus);
-      } catch (err) {
-        console.log(err);
-      } finally {
+        const s = await getSessionById(id);
+        const r = await getSessionReviews(id);
+        const b = await checkBooked(user?.email, id);
+
+        setSession(s);
+        setReviews(r || []);
+        setIsBooked(b);
         setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        // ErrorToast("Failed to load data");
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
-  if (loading || !session) {
-    return <ActivityIndicator size="large" style={{ marginTop: 100 }} />;
-  }
+  if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
-  console.log("Session Data:", session);
+  const currentDate = new Date();
+  const isRegistrationOpen =
+    currentDate >= new Date(session.registrationStart) &&
+    currentDate <= new Date(session.registrationEnd);
+
+  const handleBooking = async () => {
+    if (parseFloat(session?.registrationFee) > 0) {
+      router.push(`/payment/${session._id}`);
+    } else {
+      const data = await bookSession({
+        studentEmail: user.email,
+        tutorEmail: session.tutorEmail,
+        sessionId: session._id,
+        sessionTitle: session.title,
+      });
+
+      // if (data?.acknowledged) SuccessToast("Session booked successfully!");
+    }
+  };
+
+  const handleReviewSubmit = async () => {
+    // if (!rating || !comment) return ErrorToast("Fill both fields");
+
+    const res = await postReview({
+      reviewerEmail: user.email,
+      comment,
+      rating,
+      sessionId: id,
+    });
+
+    if (res?.acknowledged) {
+      // SuccessToast("Review posted");
+      setComment("");
+      setRating(0);
+      const newReviews = await getSessionReviews(id);
+      setReviews(newReviews);
+    } else {
+      // ErrorToast("Failed to post review");
+    }
+  };
 
   return (
-    <ScrollView style={{ padding: 16 }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold", color: "#1e3a8a", marginBottom: 8 }}>
-        {session.title || session.name}
-      </Text>
+    <ScrollView style={{ padding: 20 }}>
+      <View style={{ borderWidth: 2, borderColor: "#7C3AED", padding: 15, borderRadius: 15 }}>
+        <Text style={{ fontSize: 28, fontWeight: "bold", textAlign: "center", color: "#7C3AED" }}>
+          <FontAwesome name="book" size={22} /> {session.title}
+        </Text>
 
-      <Text style={{ fontSize: 16, opacity: 0.8, marginBottom: 16 }}>
-        {session.description || session.desc}
-      </Text>
+        <Text style={{ marginTop: 10 }}>
+          <FontAwesome name="user" /> Tutor: {session.tutorName}
+        </Text>
 
-      <View style={{ marginBottom: 24 }}>
         <Text>
-          <Ionicons name="person" size={18} /> Tutor: {session.tutorName || session.tutor?.name}
+          <FontAwesome name="star" /> Avg Rating: 4.5 (mocked)
         </Text>
+
+        <Text style={{ marginVertical: 10 }}>{session.description}</Text>
+
         <Text>
-          <FontAwesome name="money" size={18} /> Fee:{" "}
-          {session.registrationFee > 0 ? `$${session.registrationFee}` : "Free"}
+          <FontAwesome name="calendar" /> Registration: {session.registrationStart} → {session.registrationEnd}
         </Text>
-      </View>
 
-      <TouchableOpacity
-        onPress={() => router.push(`/pages/payment/${session._id}`)}
-        disabled={isBooked}
-        style={{
-          backgroundColor: isBooked ? "#9CA3AF" : "#2563EB",
-          padding: 12,
-          borderRadius: 8,
-        }}
-      >
-        <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>
-          {isBooked ? "Already Booked ✅" : "Book Session"}
+        <Text>
+          <FontAwesome name="calendar" /> Class: {session.classStart} → {session.classEnd}
         </Text>
-      </TouchableOpacity>
 
-      {/* Reviews */}
-      <View style={{ marginTop: 30 }}>
-        <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Student Reviews</Text>
-        {reviews.length === 0 ? (
-          <Text>No reviews yet.</Text>
-        ) : (
-          reviews.map((review) => (
-            <View key={review._id} style={{ borderWidth: 1, padding: 8, borderRadius: 8, marginBottom: 10 }}>
+        <Text>
+          <FontAwesome name="clock-o" /> Duration: {session.duration}
+        </Text>
+
+        <Text>
+          <FontAwesome name="money" /> Fee: {parseFloat(session.registrationFee) > 0 ? `$${session.registrationFee}` : "Free"}
+        </Text>
+
+        <TouchableOpacity
+          onPress={handleBooking}
+          disabled={!isRegistrationOpen || isBooked || user?.userRole !== "Student"}
+          style={{
+            backgroundColor: isBooked ? "gray" : isRegistrationOpen ? "#7C3AED" : "gray",
+            padding: 12,
+            borderRadius: 10,
+            marginTop: 15,
+          }}
+        >
+          <Text style={{ textAlign: "center", color: "white", fontWeight: "bold" }}>
+            {isBooked ? "✅ Already Booked" : isRegistrationOpen ? "📅 Book Now" : "❌ Registration Closed"}
+          </Text>
+        </TouchableOpacity>
+
+        {/* REVIEW FORM */}
+        <View style={{ marginTop: 25 }}>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>📝 Leave a Review</Text>
+
+          <TextInput
+            placeholder="Rating (1-5)"
+            keyboardType="numeric"
+            value={String(rating)}
+            onChangeText={(t) => setRating(Number(t))}
+            style={{ borderWidth: 1, padding: 10, borderRadius: 8, marginTop: 10 }}
+          />
+
+          <TextInput
+            placeholder="Write your comment"
+            multiline
+            value={comment}
+            onChangeText={setComment}
+            style={{ borderWidth: 1, padding: 10, borderRadius: 8, marginTop: 10 }}
+          />
+
+          <TouchableOpacity
+            onPress={handleReviewSubmit}
+            style={{ backgroundColor: "#7C3AED", padding: 12, borderRadius: 10, marginTop: 10 }}
+          >
+            <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>Submit Review</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* REVIEWS */}
+        <View style={{ marginTop: 25 }}>
+          <Text style={{ fontWeight: "bold", fontSize: 20 }}>💬 Student Reviews</Text>
+
+          {reviews.length === 0 ? (
+            <Text>No reviews yet.</Text>
+          ) : reviews.map((review) => (
+            <View key={review._id} style={{ borderWidth: 1, padding: 10, borderRadius: 10, marginTop: 8 }}>
               <Text style={{ fontWeight: "bold" }}>{review.studentEmail}</Text>
-              <Text>Rating: {review.rating}/5</Text>
-              <Text>{review.review || review.comment}</Text>
+              <Text>Rating: {review.rating} / 5</Text>
+              <Text>{review.review}</Text>
             </View>
-          ))
-        )}
+          ))}
+        </View>
       </View>
     </ScrollView>
   );
-}
+};
+
+export default SessionDetails;
