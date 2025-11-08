@@ -48,13 +48,13 @@ function CustomDrawer() {
             <Text style={styles.drawerText}>Manage Sessions</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/allMaterials')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/admin/manageMaterial')}>
             <Text style={styles.drawerText}>Manage Materials</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/updateProfile')}>
+          {/* <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/admin/updateProfile')}>
             <Text style={styles.drawerText}>Update Profile</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </>
       )}
 
@@ -90,29 +90,29 @@ function CustomDrawer() {
       {/* ✅ Student Drawer */}
       {user && user.userRole === 'Student' && (
         <>
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/student/studentOverview')}>
             <Text style={styles.drawerText}>Student Dashboard</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/bookedSession')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/student/bookedSession')}>
             <Text style={styles.drawerText}>Booked Sessions</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/createNote')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/student/createNote')}>
             <Text style={styles.drawerText}>Create Note</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/manageNotes')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/student/manageNotes')}>
             <Text style={styles.drawerText}>Manage Notes</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/studyMaterials')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/student/studyMaterials')}>
             <Text style={styles.drawerText}>Study Materials</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/updateProfile')}>
+          {/* <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/updateProfile')}>
             <Text style={styles.drawerText}>Update Profile</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </>
       )}
 

@@ -39,7 +39,7 @@ const SessionDetails = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id,isBooked, user]);
 
   if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
@@ -59,6 +59,8 @@ const SessionDetails = () => {
         sessionTitle: session.title,
       });
 
+      console.log("Booking Data:", data);
+
       // if (data?.acknowledged) SuccessToast("Session booked successfully!");
     }
   };
@@ -72,6 +74,12 @@ const SessionDetails = () => {
       rating,
       sessionId: id,
     });
+
+    console.log("Review Response:", res);
+    console.log(      user.email,
+      comment,
+      rating,
+      id,);
 
     if (res?.acknowledged) {
       // SuccessToast("Review posted");

@@ -24,7 +24,7 @@ const UploadMaterials = ({ route }) => {
   const [image, setImage] = useState(null);
   const [sessions, setSessions] = useState([]);
 
-  const imgbbApiKey = "YOUR_IMGBB_API_KEY";
+  const imgbbApiKey = "9f78c7ea3eb88b49292eb95698ec8282";
 
   useEffect(() => {
     if (!user?.email) return;
