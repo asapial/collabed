@@ -1,9 +1,8 @@
 // app/_layout.js
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Drawer } from 'expo-router/drawer';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import AuthProvider from './src/context/AuthProvider';
@@ -11,11 +10,7 @@ import AppBar from './src/Components/shared/appBar';
 import { useContext } from 'react';
 import { AuthContext } from './src/context/AuthContext';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
-// Custom Drawer component that consumes context safely
+// ---------------- Custom Drawer ----------------
 function CustomDrawer() {
   const { user, signOutUser } = useContext(AuthContext);
 
@@ -35,37 +30,143 @@ function CustomDrawer() {
         <Text style={styles.drawerText}>Tutor List</Text>
       </TouchableOpacity>
 
+
+
+
+      {/* ✅ Admin Drawer */}
+      {user && user.userRole === 'Admin' && (
+        <>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard')}>
+            <Text style={styles.drawerText}>Admin Dashboard</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/allUsers')}>
+            <Text style={styles.drawerText}>Manage Users</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/allStudySessions')}>
+            <Text style={styles.drawerText}>Manage Sessions</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/allMaterials')}>
+            <Text style={styles.drawerText}>Manage Materials</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/updateProfile')}>
+            <Text style={styles.drawerText}>Update Profile</Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      {/* ✅ Tutor Drawer */}
+      {user && user.userRole === 'Tutor' && (
+        <>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard')}>
+            <Text style={styles.drawerText}>Tutor Dashboard</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/createSession')}>
+            <Text style={styles.drawerText}>Create Session</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/mySession')}>
+            <Text style={styles.drawerText}>My Sessions</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/uploadMaterials')}>
+            <Text style={styles.drawerText}>Upload Materials</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/viewMaterials')}>
+            <Text style={styles.drawerText}>View Materials</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/updateProfile')}>
+            <Text style={styles.drawerText}>Update Profile</Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      {/* ✅ Student Drawer */}
+      {user && user.userRole === 'Student' && (
+        <>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard')}>
+            <Text style={styles.drawerText}>Student Dashboard</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/bookedSession')}>
+            <Text style={styles.drawerText}>Booked Sessions</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/createNote')}>
+            <Text style={styles.drawerText}>Create Note</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/manageNotes')}>
+            <Text style={styles.drawerText}>Manage Notes</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/studyMaterials')}>
+            <Text style={styles.drawerText}>Study Materials</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/studentDashboard/updateProfile')}>
+            <Text style={styles.drawerText}>Update Profile</Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      {/* ✅ Common Logout Button */}
       {user && (
         <TouchableOpacity style={styles.drawerItem} onPress={signOutUser}>
-          <Text style={styles.drawerText}>Logout</Text>
+          <Text style={[styles.drawerText, { color: 'red' }]}>Logout</Text>
         </TouchableOpacity>
       )}
+
     </View>
   );
 }
 
-// ✅ Wrap the whole navigation tree inside AuthProvider
+// ---------------- Root Layout ----------------
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  // Force app to use light (white) theme
+  const whiteTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: '#FFFFFF',
+      card: '#FFFFFF',
+      text: '#000000',
+      border: '#E5E5E5',
+      primary: '#1E40AF', // optional accent color
+    },
+  };
 
   return (
     <AuthProvider>
-      <ThemeProvider value={colorScheme === 'light' ? DefaultTheme : DarkTheme}>
+      <ThemeProvider value={whiteTheme}>
         <Drawer
           drawerContent={() => <CustomDrawer />}
           screenOptions={{
             header: () => <AppBar />,
+            drawerStyle: {
+              backgroundColor: '#FFFFFF',
+            },
+            drawerLabelStyle: {
+              color: '#000000',
+            },
           }}
         >
           <Drawer.Screen name="(tabs)" />
           <Drawer.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         </Drawer>
-        <StatusBar style="auto" />
+        <StatusBar style="dark" /> {/* Dark text on white background */}
       </ThemeProvider>
     </AuthProvider>
   );
 }
 
+// ---------------- Styles ----------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,

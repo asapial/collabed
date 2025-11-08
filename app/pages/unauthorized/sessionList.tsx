@@ -40,7 +40,7 @@ export default function AllSessions() {
   };
 
   const goToDetails = (id) => {
-    router.push(`/sessionDetails/${id}`);
+    router.push(`/pages/unauthorized/${id}`);
   };
 
   if (loading) {
