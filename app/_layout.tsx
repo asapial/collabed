@@ -36,15 +36,15 @@ function CustomDrawer() {
       {/* ✅ Admin Drawer */}
       {user && user.userRole === 'Admin' && (
         <>
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/admin/adminOverview')}>
             <Text style={styles.drawerText}>Admin Dashboard</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/allUsers')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/admin/manageUsers')}>
             <Text style={styles.drawerText}>Manage Users</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/adminDashboard/allStudySessions')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/admin/manageSession')}>
             <Text style={styles.drawerText}>Manage Sessions</Text>
           </TouchableOpacity>
 
