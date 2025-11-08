@@ -65,25 +65,25 @@ function CustomDrawer() {
             <Text style={styles.drawerText}>Tutor Dashboard</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/createSession')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/tutor/createSession')}>
             <Text style={styles.drawerText}>Create Session</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/mySession')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/tutor/mySession')}>
             <Text style={styles.drawerText}>My Sessions</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/uploadMaterials')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/tutor/uploadMaterials')}>
             <Text style={styles.drawerText}>Upload Materials</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/viewMaterials')}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/dashboard/tutor/viewMaterials')}>
             <Text style={styles.drawerText}>View Materials</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/updateProfile')}>
+          {/* <TouchableOpacity style={styles.drawerItem} onPress={() => router.push('/pages/tutorDashboard/updateProfile')}>
             <Text style={styles.drawerText}>Update Profile</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </>
       )}
 
